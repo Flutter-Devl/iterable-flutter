@@ -3,7 +3,7 @@ import UIKit
 import IterableSDK
 import UserNotifications
 
-public class SwiftIterableFlutterPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate, IterableCustomActionDelegate {
+public class SwiftIterableFlutterPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate, IterableCustomActionDelegate, IterableURLDelegate {
    
     static var channel: FlutterMethodChannel? = nil
     
@@ -78,6 +78,8 @@ public class SwiftIterableFlutterPlugin: NSObject, FlutterPlugin, UNUserNotifica
         config.pushIntegrationName = pushIntegrationName
         config.autoPushRegistration = true
         config.customActionDelegate = self
+        config.urlDelegate = self
+        
         
         IterableAPI.initialize(apiKey: apiKey, config: config)
     }
@@ -128,6 +130,16 @@ public class SwiftIterableFlutterPlugin: NSObject, FlutterPlugin, UNUserNotifica
         notifyPushNotificationOpened()
         return true;
     }
+    public func handle(iterableURL url: URL, inContext context: IterableActionContext) -> Bool {
+
+        let payload = [
+                    "url": url.path ?? "none",
+                    "data" : context.action.data ?? "noData",
+                   
+                ] as [String : Any]
+        SwiftIterableFlutterPlugin.channel?.invokeMethod("receiveDeepLink", arguments: payload)
+        return true;
+}
 
     public func notifyPushNotificationOpened(){
         let userInfo = IterableAPI.lastPushPayload

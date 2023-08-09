@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/services.dart';
 
@@ -10,6 +11,7 @@ class IterableFlutter {
   static const MethodChannel _channel = MethodChannel('iterable_flutter');
 
   static OpenedNotificationHandler? _onOpenedNotification;
+  static void Function(String)? _onLinkHandler;
 
   static Future<void> initialize({
     required String apiKey,
@@ -18,13 +20,15 @@ class IterableFlutter {
   }) async {
     await _channel.invokeMethod(
       'initialize',
-      {
-        'apiKey': apiKey,
-        'pushIntegrationName': pushIntegrationName,
-        'activeLogDebug': activeLogDebug
-      },
+      {'apiKey': apiKey, 'pushIntegrationName': pushIntegrationName, 'activeLogDebug': activeLogDebug},
     );
     _channel.setMethodCallHandler(nativeMethodCallHandler);
+
+    print("initialize");
+  }
+
+  static void setLinkHandler(void Function(String) handler) {
+    _onLinkHandler = handler;
   }
 
   static Future<void> setEmail(String email) async {
@@ -39,8 +43,7 @@ class IterableFlutter {
     String event, {
     Map<String, dynamic>? dataFields,
   }) async {
-    await _channel
-        .invokeMethod('track', {"event": event, "dataFields": dataFields});
+    await _channel.invokeMethod('track', {"event": event, "dataFields": dataFields});
   }
 
   static Future<void> registerForPush() async {
@@ -71,19 +74,22 @@ class IterableFlutter {
 
   static Future<dynamic> nativeMethodCallHandler(MethodCall methodCall) async {
     final arguments = methodCall.arguments as Map<dynamic, dynamic>;
-    final argumentsCleaned = sanitizeArguments(arguments);
 
     switch (methodCall.method) {
+      case "receiveDeepLink":
+        _onLinkHandler?.call(arguments['url']);
+        return "This data from native.....";
       case "openedNotificationHandler":
+        final argumentsCleaned = sanitizeArguments(arguments);
         _onOpenedNotification?.call(argumentsCleaned);
         return "This data from native.....";
+
       default:
         return "Nothing";
     }
   }
 
-  static Map<String, dynamic> sanitizeArguments(
-      Map<dynamic, dynamic> arguments) {
+  static Map<String, dynamic> sanitizeArguments(Map<dynamic, dynamic> arguments) {
     final result = arguments;
 
     final data = result['additionalData'];

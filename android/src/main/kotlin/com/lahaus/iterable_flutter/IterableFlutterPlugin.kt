@@ -107,6 +107,12 @@ class IterableFlutterPlugin : FlutterPlugin, MethodCallHandler {
         notifyPushNotificationOpened()
         false
       }
+      .setUrlHandler { uri, _ ->
+        val map: MutableMap<String, Any?> = HashMap()
+        map["url"] = uri.getPath()
+        channel.invokeMethod("receiveDeepLink", map)
+        false
+      }
 
     if (activeLogDebug) {
       configBuilder.setLogLevel(Log.DEBUG)
