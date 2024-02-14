@@ -27,11 +27,15 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 31
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 24
     }
 
     testOptions {
