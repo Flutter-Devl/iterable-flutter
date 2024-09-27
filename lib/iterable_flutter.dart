@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/services.dart';
 
@@ -23,8 +22,6 @@ class IterableFlutter {
       {'apiKey': apiKey, 'pushIntegrationName': pushIntegrationName, 'activeLogDebug': activeLogDebug},
     );
     _channel.setMethodCallHandler(nativeMethodCallHandler);
-
-    print("initialize");
   }
 
   static void setLinkHandler(void Function(String) handler) {
