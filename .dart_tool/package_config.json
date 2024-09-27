@@ -155,10 +155,10 @@
       "name": "iterable_flutter",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.13"
+      "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-09-27T05:34:50.139297Z",
+  "generated": "2024-09-27T05:39:06.494098Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
   "flutterRoot": "file:///Users/mehsarairfan/FlutterDev/flutter",
