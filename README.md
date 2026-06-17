@@ -56,5 +56,13 @@ class _MyAppState extends State<MyApp> {
 
 5. Track your events and optional data fields, call `IterableFlutter.track` method.
 
+### iOS: Xcode 26 / `performAndWait` compatibility
+
+This plugin depends on `Iterable-iOS-SDK >= 6.6.7`, which includes Iterable's fix for the
+`performAndWait` ambiguity introduced with Xcode 26 / iOS 26 SDK changes.
+
+Do **not** add manual `post_install` patches to `IterableCoreDataPersistence.swift` in your
+app's `Podfile` — the native SDK version constraint above is sufficient.
+
 ### Example
 Check the [example/](example/) folder to see an example project using this library.

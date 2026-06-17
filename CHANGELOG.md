@@ -1,3 +1,6 @@
+## 0.5.9
+- build(iOS): require Iterable-iOS-SDK >= 6.6.7 for Xcode 26 `performAndWait` compatibility
+
 ## 0.5.8
 - feat(Track): allow data fields params for track #61
 
